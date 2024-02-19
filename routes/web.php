@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/tasks', function () {
-    $tasks = \App\Models\Task::latest()->get();
+    $tasks = \App\Models\Task::latest()->paginate();
     return view('index', [
         'tasks' => $tasks
     ]);
@@ -69,6 +69,12 @@ Route::get('/', function () {
     return redirect()->route('tasks.index');
 });
 
+
+Route::put('tasks/{task}/toggle-complete', function (Task $task) {
+   $task->toggleComplete();
+
+   return redirect()->back()->with('success', 'Task updated successfully');
+})->name('tasks.toggle-complete');
 
 Route::fallback(function () {
     return ('FALBACK');
